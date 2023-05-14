@@ -1,2 +1,2 @@
 # car_rental
-Projeto feito utlizando Kotlin e Spring Boot
+Projeto feito utilizando Kotlin e Spring Boot
