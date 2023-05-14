@@ -1,7 +1,7 @@
 package com.example.demo.interfaces
 
-import com.example.demo.domain.Driver
-import com.example.demo.domain.DriverRepository
+import com.example.demo.domain.Passenger
+import com.example.demo.domain.PassengerRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
@@ -15,60 +15,56 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDate
 import java.util.*
 
 @Service
 @RestController
 @RequestMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-class DriverAPI(
-    var driverRepository: DriverRepository
+class PassengerAPI(
+    var passengerDriver: PassengerRepository
 ) {
 
     @GetMapping("drivers")
-    fun listDrivers() = driverRepository.findAll()
+    fun listDrivers() = passengerDriver.findAll()
 
     @GetMapping("driver/{id}")
-    fun listOneDriver(@PathVariable("id") id: Long) = driverRepository
+    fun listOneDriver(@PathVariable("id") id: Long) = passengerDriver
         .findById(id)
         .orElseThrow {
             ResponseStatusException(HttpStatus.NOT_FOUND)
         }
 
     @PostMapping("drivers")
-    fun createDriver(@RequestBody driver: Driver) = driverRepository.save(driver)
+    fun createDriver(@RequestBody passenger: Passenger) = passengerDriver.save(passenger)
 
     @PutMapping("driver/{id}")
-    fun updateFullDriver(@PathVariable("id") id: Long, @RequestBody driver: Driver): Driver {
-        return driverRepository.save(
-            driverRepository
+    fun updateFullDriver(@PathVariable("id") id: Long, @RequestBody driver: Passenger): Passenger {
+        return passengerDriver.save(
+            passengerDriver
                 .findById(id)
                 .get()
                 .copy(
-                    birthData = driver.birthData,
                     nome = driver.nome
                 )
         )
     }
 
     @PatchMapping("driver/{id}")
-    fun updateDriver(@PathVariable("id") id: Long, @RequestBody driver: DriverPatch): Driver {
-        val driverLocal = driverRepository.findById(id).get()
-        return driverRepository.save(
+    fun updateDriver(@PathVariable("id") id: Long, @RequestBody passenger: PassengerLocal): Passenger {
+        val driverLocal = passengerDriver.findById(id).get()
+        return passengerDriver.save(
             driverLocal
                 .copy(
-                    nome = driver.nome ?: driverLocal.nome,
-                    birthData = driver.birthData ?: driverLocal.birthData
+                    nome = passenger.nome ?: driverLocal.nome,
                 )
         )
     }
 
     @DeleteMapping("driver/{id}")
-    fun deleteDriver(@PathVariable("id") id: Long) = driverRepository.delete(
-        driverRepository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) })
+    fun deleteDriver(@PathVariable("id") id: Long) = passengerDriver.delete(
+        passengerDriver.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) })
 }
 
-data class DriverPatch(
-    val nome: String?,
-    val birthData: LocalDate?
+data class PassengerLocal(
+    val nome: String?
 )

@@ -52,7 +52,7 @@ class DriverAPI(
     }
 
     @PatchMapping("driver/{id}")
-    fun updateDriver(@PathVariable("id") id: Long, @RequestBody driver: DriverPatch): Driver {
+    fun updateDriver(@PathVariable("id") id: Long, @RequestBody driver: PassengerLocal): Driver {
         val driverLocal = driverRepository.findById(id).get()
         return driverRepository.save(
             driverLocal
